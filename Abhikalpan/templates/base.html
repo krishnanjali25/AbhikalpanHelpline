@@ -1,0 +1,54 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% load staticfiles %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+
+<script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+</head>
+<body id="body">
+
+<table  class="ui very basic collapsing celled small fluid sortable table"
+       style="padding-left: 2.5%;padding-right: 2.5%;margin: auto;">
+    <thead>
+    <tr>
+        <th class="wide">
+          Messages
+        </th>
+    </tr>
+    </thead>
+    <tbody id="table_data">
+    </tbody>
+    <form method="POST">
+      <input id="input" type="text" rows="2" name="input" required="true"/>
+      <input id="sub" type="button" rows="2" name="sub" required="true"/>
+    </form>
+</table>
+
+</body>
+<script type="text/javascript">
+        $('#sub').click(function()
+        {
+            $('#table_data').append("<tr><td>" + $("#input").val() + "</td></tr>");
+
+            $.ajax({
+            type:'POST',
+            url:'/home/',
+            data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            input:$("#input").val(),
+            sub:$("#sub").val(),
+            },
+            success: function(data){
+              alert(data.output);
+                $('#table_data').append("<tr><td>" + data.output + "</td></tr>");
+                document.getElementById('input').value="";
+          }
+         });
+       });
+</script>
+</html>

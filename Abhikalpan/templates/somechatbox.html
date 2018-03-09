@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Box</title>
+  {% load static %}
+    <link rel="stylesheet" href="{% static 'Abhikalpan_Helpline/css/style.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700">
+    <script type="text/javascript" src="{% static 'Abhikalpan_Helpline/js/index.js' %}"></script>
+</head>
+
+<body background="{% static 'Abhikalpan_Helpline/image.jpeg' %}">
+  <table  class="ui very basic collapsing celled small fluid sortable table"
+         style="padding-left: 2.5%;padding-right: 2.5%;margin: auto;">
+      <thead>
+      <tr>
+          <th class="wide">
+            Messages
+          </th>
+      </tr>
+      </thead>
+      <tbody id="table_data" class="chat chat-history chat-message-content clearfix  " >
+
+      </tbody>
+
+	<div id="live-chat">
+
+		<header class="clearfix">
+<!--
+			<a href="#" class="chat-close">x</a> -->
+
+
+		</header>
+
+</table>
+			<form method="post">
+				<fieldset>
+
+					<input id="input" type="text" name="input" placeholder="Type your message…" autofocus>
+          <input id="sub" value="Send" type="button" rows="2" name="sub" required="true"/>
+				</fieldset>
+
+			</form>
+
+		</div> <!-- end chat -->
+
+	</div> <!-- end live-chat -->
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+
+
+
+    <script  src="js/index.js"></script>
+</body>
+</html>
+
+<script type="text/javascript">
+        $('#sub').click(function()
+        {
+            $('#table_data').append("<tr><td>" + $("#input").val() + "</td></tr>");
+
+            $.ajax({
+            type:'POST',
+            url:'/home/',
+            data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            input:$("#input").val(),
+            sub:$("#sub").val(),
+            },
+            success: function(data){
+              alert(data.output);
+                $('#table_data').append("<tr><td>" + data.output + "</td></tr>");
+                document.getElementById('input').value="";
+          }
+         });
+       });
+</script>
